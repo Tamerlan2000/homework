@@ -1,29 +1,13 @@
 import psycopg2
 import requests
-from parser import JSONParser
 import json
+import sqlite3
+from parser import JSONListParser
 
-response = requests.get('http://example.com/api/v2/get/data')
 
-try:
-    response.raise_for_status()  # Raise an exception for bad status codes
-    json_data = response.json()
-except requests.exceptions.RequestException as e:
-    print(f"Error making request: {e}")
-    exit(1)
-except json.JSONDecodeError:
-    print("Error decoding JSON data. Response may not be valid JSON.")
-    json_data = {}
-
-parser = JSONParser(json_data)
-parsed_data = parser.parse()
-
-print('Data gathered, parsed, and stored in the database.')
-
-# Assuming you have a function to establish a database connection
 def get_db_connection():
     try:
-        return psycopg2.connect(
+        return sqlite3.connect(
             host='your_database_host',
             database='your_database_name',
             user='your_database_user',
@@ -33,14 +17,59 @@ def get_db_connection():
         print(f'Error connecting to the database: {e}')
         exit(1)
 
-# Database storage logic
-try:
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("INSERT INTO your_table_name (message) VALUES (%s)", (parsed_data,))
-    conn.commit()
-    cur.close()
-    conn.close()
-    print('Data stored in the database.')
-except Exception as e:
-    print(f'Error storing data in the database: {str(e)}')
+
+def post_request():
+    url = 'http://localhost:7000/api/v2/add/data'
+    with open('sample.json', 'r') as file:
+        json_object = json(file)
+
+    response = requests.post(url, json=json_object)
+    if response.status_code == 200:
+        print('JSON data sent successfully!')
+    else:
+        print('Failed to send JSON data:', response.status_code)
+
+def get_request():
+    url = 'http://localhost:7000/api/v2/get/data'
+    response = requests.get(url)
+    print(response)
+    resp_dict = response.json()
+
+    students_list = JSONListParser(resp_dict["Students"])
+    print(students_list)
+    # try:
+    #     conn = get_db_connection()
+    #     cur = conn.cursor()
+    #     cur.execute("INSERT INTO your_table_name (message) VALUES (%s)", (parsed_data,))
+    #     conn.commit()
+    #     cur.close()
+    #     conn.close()
+    #     print('Data stored in the database.')
+    # except Exception as e:
+    #     print(f'Error storing data in the database: {str(e)}')
+
+user_questionary = '''
+Choose your action:
+1. GET option request
+2. POST option request
+3. EXIT
+Selected option: '''
+
+
+
+if __name__ == '__main__':
+    print('Starting client')
+    print('--------------')
+
+    while True:
+        user_option = input(user_questionary)
+        match user_option:
+            case '1':
+                print('GET')
+                get_request()
+            case '2':
+                post_request()
+            case '3':
+                print('Exiting client')
+                break
+
