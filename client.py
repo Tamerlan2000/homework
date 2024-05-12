@@ -1,22 +1,7 @@
-import psycopg2
 import requests
 import json
 import sqlite3
 from parser import JSONListParser
-
-
-# def get_db_connection():
-#     try:
-#         return sqlite3.connect(
-#             host='your_database_host',
-#             database='your_database_name',
-#             user='your_database_user',
-#             password='your_database_password'
-#         )
-#         return sqlite3.connect('your_database_name.db')  # Adjust database name as needed
-#     except sqlite3.Error as e:
-#         print(f'Error connecting to the database: {e}')
-#         exit(1)
 
 def get_db_connection():
     try:
@@ -67,28 +52,6 @@ def get_request(con, cur):
     else:
         print('Failed to get data:', response.status_code)
 
-
-
-# def get_request():
-#     url = 'http://localhost:7000/api/v2/get/data'
-#     response = requests.get(url)
-#     print(response)
-#     resp_dict = response.json()
-#
-#     students = JSONListParser(resp_dict["Students"])
-#     print(students)
-#     for i in students.student_list:
-#         print(students)
-    # try:
-    #     conn = get_db_connection()
-    #     cur = conn.cursor()
-    #     cur.execute("INSERT INTO your_table_name (message) VALUES (%s)", (parsed_data,))
-    #     conn.commit()
-    #     cur.close()
-    #     conn.close()
-    #     print('Data stored in the database.')
-    # except Exception as e:
-    #     print(f'Error storing data in the database: {str(e)}')
 
 user_questionary = '''
 Choose your action:

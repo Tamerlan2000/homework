@@ -1,0 +1,28 @@
+{
+  "Students": [
+    {
+      "Name": "John",
+      "Grade": "3.7",
+      "Nationality": "American",
+      "Major": "Engineering",
+      "University": "MIT",
+      "Student_ID": 537849
+	},
+    {
+      "Name": "Jack",
+      "Grade": "3.4",
+      "Nationality": "British",
+      "Major": "Maths",
+      "University": "Imperial College London",
+      "Student_ID": 802729
+    },
+    {
+      "Name": "Ben",
+      "Grade": "3.9",
+      "Nationality": "Irish",
+      "Major": "Medicine",
+      "University": "Oxford",
+      "Student_ID": 734093
+    }
+  ]
+}
