@@ -10,9 +10,6 @@ def get_db_connection():
         print(f'Error connecting to the database: {e}')
         exit(1)
 
-
-
-
 def post_request():
     url = 'http://localhost:7000/api/v2/add/data'
     with open('newsample.json') as file:
@@ -59,8 +56,6 @@ Choose your action:
 2. POST option request
 3. EXIT
 Selected option: '''
-
-
 
 
 if __name__ == '__main__':
