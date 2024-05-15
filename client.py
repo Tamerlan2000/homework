@@ -2,17 +2,20 @@ import requests
 import json
 import sqlite3
 from parser import JSONListParser
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from parser_one import Base, Parser
 
-def get_db_connection():
-    try:
-        return sqlite3.connect('My_Database.db')  # Adjust database name as needed
-    except sqlite3.Error as e:
-        print(f'Error connecting to the database: {e}')
-        exit(1)
+# def get_db_connection():
+#     try:
+#         return sqlite3.connect('My_Database.db')  # Adjust database name as needed
+#     except sqlite3.Error as e:
+#         print(f'Error connecting to the database: {e}')
+#         exit(1)
 
 def post_request():
     url = 'http://localhost:7000/api/v2/add/data'
-    with open('newsample.json') as file:
+    with open('new_sample.json') as file:
         json_object = json.load(file)
 
     response = requests.post(url, json=json_object)
@@ -21,29 +24,20 @@ def post_request():
     else:
         print('Failed to send JSON data:', response.status_code)
 
-def get_request(con, cur):
+def get_request():
     url = 'http://localhost:7000/api/v2/get/data'
     response = requests.get(url)
     if response.status_code == 200:
         try:
-            #resp_dict = response.json()
-            content = json.loads(response.text)
-            students = JSONListParser(content["Students"])
-            print(students)
-            for student in students.student_list:
-                properties = (
-                    student.student_id,
-                    student.name,
-                    student.grade,
-                    student.nationality,
-                    student.major,
-                    student.university
-                            )
-                print(properties)
-                cur.execute("INSERT INTO our_students VALUES(?,?,?,?,?,?);", properties)
-                con.commit()
+            res = Parser(response.text)
+            print('Object created')
+            parsed_data = res.parse_json()
+            print('Parsed data')
+            session.add(parsed_data)
+            print('Added tables to database')
+            session.commit()
         except:
-            print('Response content:', response.text)
+            print('Error is here:')
             #print(Exception)
 
     else:
@@ -59,29 +53,26 @@ Selected option: '''
 
 
 if __name__ == '__main__':
-    print('Starting client')
-    print('--------------')
-    con = sqlite3.connect("My_database.db")
-    cur = con.cursor()
-    cur.execute("""CREATE TABLE IF NOT EXISTS our_students(
-       student_ID INT PRIMARY KEY,
-       name TEXT,
-       grade TEXT,
-       nationality TEXT,
-       major TEXT,
-       university TEXT);
-    """)
-    con.commit()
+
+    DATABASE_URL = 'sqlite:///my_database.db'
+
+    engine = create_engine(DATABASE_URL)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    Base.metadata.create_all(engine)
+
     while True:
         user_option = input(user_questionary)
         match user_option:
             case '1':
                 print('GET')
-                get_request(con, cur)
+                get_request()
             case '2':
                 post_request()
             case '3':
                 print('Exiting client')
-                con.close()
+                session.close()
+                engine.dispose()
                 break
 
