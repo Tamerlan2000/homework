@@ -35,18 +35,18 @@ def get_request(session):
 
 
     if response.status_code == 200:
-        try:
-            res = Parser(response.text)
-            print('Object created')
-            parsed_data = res.parse_json()
-            print('Parsed data')
-            session.add_all(parsed_data)
-            print('Added tables to database')
-            session.commit()
-        except:
-            print('Error is here:')
-            #session.rollback()# New change
-            #print(Exception)
+        # try:
+        res = Parser(response.text)
+        print('Object created')
+        parsed_data = res.parse_json()
+        print('Parsed data')
+        session.add(parsed_data)
+        print('Added tables to database')
+        session.commit()
+        # except Exception:
+        #     print('Error is here:')
+        #     #session.rollback()# New change
+        #     print(Exception)
 
     else:
         print('Failed to get data:', response.status_code)
