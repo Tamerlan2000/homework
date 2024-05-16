@@ -30,7 +30,7 @@ class Item(Base):
     malware_list = Column(String)
     seq_update = Column(Integer)
     indicators = relationship('Indicator', backref='item')
-    #data_id = Column(Integer, ForeignKey('data.id')) # New changes
+    data_sequence = Column(Integer, ForeignKey('data.seq_update')) # New changes
 
 
     def __repr__(self):
@@ -98,6 +98,7 @@ class Parser():
         return data_obj
 
     def parse_json(self) -> Data:
-        #return self.__parse_data(self.json_string)
-        json_data = json.loads(self.json_string)
-        return self.__parse_data(json_data)
+        return self.__parse_data(self.json_string)
+        #json_data = json.loads(self.json_string)
+        #return self.__parse_data(json_data)
+

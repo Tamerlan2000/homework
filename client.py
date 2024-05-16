@@ -31,7 +31,7 @@ def get_request(session):
     # response = requests.get
 
     response = requests.get('http://localhost:7000/api/v2/get/data')
-    response_json =json.loads(response.text)
+    #response_json = response.text
 
 
     if response.status_code == 200:
