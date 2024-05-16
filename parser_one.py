@@ -30,6 +30,8 @@ class Item(Base):
     malware_list = Column(String)
     seq_update = Column(Integer)
     indicators = relationship('Indicator', backref='item')
+    #data_id = Column(Integer, ForeignKey('data.id')) # New changes
+
 
     def __repr__(self):
         return f"Item(id={self.id}, author={self.author}, company_id={self.company_id}, is_published={self.is_published}, is_tailored={self.is_tailored}, langs={self.langs}, malware_list={self.malware_list}, seq_update={self.seq_update})"
@@ -50,6 +52,7 @@ class Parser():
     def __init__(self, json_string):
         json_data = json.loads(json_string)
         self.json_string = json_data
+        #self.json_string = json_string
 
     def __parse_indicator(self, indicator_data: dict, item_id: str) -> Indicator:
         print('__parse_indicator')
@@ -78,6 +81,7 @@ class Parser():
         for indicator_data in item_data['indicators']:
             indicator = self.__parse_indicator(indicator_data, item.id)
             item.indicators.append(indicator)
+            print(item.__repr__())
         return item
 
     def __parse_data(self, json_data) -> Data:
@@ -87,13 +91,13 @@ class Parser():
             seq_update=json_data.get('seqUpdate')
         )
         print('Data object is created')
-        for item_data in json_data.get('items'):
+        for item_data in json_data.get('items', []): #new change
             item = self.__parse_item(item_data)
             data_obj.items.append(item)
+            print(data_obj.__repr__())
         return data_obj
 
     def parse_json(self) -> Data:
-        return self.__parse_data(self.json_string)
-
-
-
+        #return self.__parse_data(self.json_string)
+        json_data = json.loads(self.json_string)
+        return self.__parse_data(json_data)

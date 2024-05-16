@@ -63,7 +63,7 @@ created later.
 
 #### get_request()
 
-* Description: Retrieves JSON data from the server, parses it, and stores it in the SQLite database.
+* Description: Retrieves JSON data from the server, parses it.
 * Endpoint: http://localhost:5000/api/v2/get/data
 * Method: GET
 * Response: Status message confirming data retrieval and storage.

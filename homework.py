@@ -10,8 +10,8 @@ load_dotenv()
 def get_data():
     with open('sample.json', 'r') as file:
         json_data = json.load(file)
+        #print(json_data)
     return jsonify(json_data)
-
 
 @app.route('/api/v2/add/data', methods=['POST'])
 def post_data():
