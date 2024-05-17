@@ -13,7 +13,6 @@ created later.
 * Flask
 * requests
 * sqlite3
-* python-dotenv
 
 ## Setup Instructions
 

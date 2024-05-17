@@ -1,16 +1,12 @@
 import json
 from flask import Flask, jsonify, request
-from dotenv import load_dotenv
 
 app = Flask(__name__)
-
-load_dotenv()
 
 @app.route('/api/v2/get/data', methods=['GET'])
 def get_data():
     with open('sample.json', 'r') as file:
         json_data = json.load(file)
-        #print(json_data)
     return jsonify(json_data)
 
 @app.route('/api/v2/add/data', methods=['POST'])
