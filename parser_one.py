@@ -39,7 +39,6 @@ class Item(Base):
 
 class Data(Base):
     __tablename__ = 'data'
-    #id = Column(Integer, primary_key=True)
     count = Column(Integer)
     seq_update = Column(Integer, primary_key=True)
     items = relationship('Item', backref='data')
@@ -52,7 +51,6 @@ class Parser():
     def __init__(self, json_string):
         json_data = json.loads(json_string)
         self.json_string = json_data
-        #self.json_string = json_string
 
     def __parse_indicator(self, indicator_data: dict, item_id: str) -> Indicator:
         print('__parse_indicator')
@@ -99,6 +97,4 @@ class Parser():
 
     def parse_json(self) -> Data:
         return self.__parse_data(self.json_string)
-        #json_data = json.loads(self.json_string)
-        #return self.__parse_data(json_data)
 

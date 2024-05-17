@@ -68,17 +68,6 @@ created later.
 * Method: GET
 * Response: Status message confirming data retrieval and storage.
 
-## The structure of a database
-
-` our_students (
-    student_ID INT PRIMARY KEY,
-    name TEXT,
-    grade TEXT,
-    nationality TEXT,
-    major TEXT,
-    university TEXT
-);`
-
 ## Parser Implementation
 
 * parser.py:

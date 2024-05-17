@@ -1,17 +1,8 @@
 import requests
 import json
-import sqlite3
-from parser import JSONListParser
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from parser_one import Base, Parser
-
-# DATABASE_URL = 'sqlite:///my_database.db'
-# engine = create_engine(DATABASE_URL)
-# Session = sessionmaker(bind=engine)
-# session = Session()
-#
-# Base.metadata.create_all(engine)
 
 def post_request():
     url = 'http://localhost:7000/api/v2/add/data'
@@ -27,11 +18,8 @@ def post_request():
 
 def get_request(session):
 
-    # url = 'http://localhost:7000/api/v2/get/data'
-    # response = requests.get
 
     response = requests.get('http://localhost:7000/api/v2/get/data')
-    #response_json = response.text
 
 
     if response.status_code == 200:
@@ -43,10 +31,6 @@ def get_request(session):
         session.add(parsed_data)
         print('Added tables to database')
         session.commit()
-        # except Exception:
-        #     print('Error is here:')
-        #     #session.rollback()# New change
-        #     print(Exception)
 
     else:
         print('Failed to get data:', response.status_code)
